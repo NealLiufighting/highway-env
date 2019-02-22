@@ -29,7 +29,8 @@ class AbstractEnv(gym.Env):
                1: 'IDLE',
                2: 'LANE_RIGHT',
                3: 'FASTER',
-               4: 'SLOWER'}
+               4: 'SLOWER',
+               5: 'HANDBRAKE'}
     """
         A mapping of action indexes to action labels
     """
@@ -247,6 +248,8 @@ class AbstractEnv(gym.Env):
         :return: the list of available actions
         """
         actions = [self.ACTIONS_INDEXES['IDLE']]
+        if 'HANDBRAKE' in self.ACTIONS_INDEXES:
+            actions.append(self.ACTIONS_INDEXES['HANDBRAKE'])
         for l_index in self.road.network.side_lanes(self.vehicle.lane_index):
             if l_index[2] < self.vehicle.lane_index[2] \
                     and self.road.network.get_lane(l_index).is_reachable_from(self.vehicle.position):

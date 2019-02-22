@@ -106,7 +106,7 @@ class HighwayEnv(AbstractEnv):
         :param action: the last action performed
         :return: the corresponding reward
         """
-        action_reward = {0: self.LANE_CHANGE_REWARD, 1: 0, 2: self.LANE_CHANGE_REWARD, 3: 0, 4: 0}
+        action_reward = {0: self.LANE_CHANGE_REWARD, 1: 0, 2: self.LANE_CHANGE_REWARD, 3: 0, 4: 0, 5: 0}
         neighbours = self.road.network.all_side_lanes(self.vehicle.lane_index)
         state_reward = \
             + self.config["collision_reward"] * self.vehicle.crashed \
@@ -123,10 +123,10 @@ class HighwayEnv(AbstractEnv):
         """
             The episode is over if the ego vehicle crashed or the time is out.
         """
-        return self.vehicle.crashed or self.steps >= self.config["duration"]
+        return self.vehicle.handbrake or self.vehicle.crashed or self.steps >= self.config["duration"]
 
     def _constraint(self, action):
         """
             The constraint signal is the occurrence of collision
         """
-        return float(self.vehicle.crashed)
+        return float(self.vehicle.crashed and not self.vehicle.handbrake)

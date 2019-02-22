@@ -189,6 +189,7 @@ class MDPVehicle(ControlledVehicle):
         super(MDPVehicle, self).__init__(road, position, heading, velocity, target_lane_index, target_velocity, route)
         self.velocity_index = self.speed_to_index(self.target_velocity)
         self.target_velocity = self.index_to_speed(self.velocity_index)
+        self.handbrake = False
 
     def act(self, action=None):
         """
@@ -203,6 +204,8 @@ class MDPVehicle(ControlledVehicle):
             self.velocity_index = self.speed_to_index(self.velocity) + 1
         elif action == "SLOWER":
             self.velocity_index = self.speed_to_index(self.velocity) - 1
+        elif action == "HANDBRAKE":
+            self.handbrake = True
         else:
             super(MDPVehicle, self).act(action)
             return
